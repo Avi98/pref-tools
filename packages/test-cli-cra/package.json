@@ -1,0 +1,21 @@
+{
+	"dependencies": {
+	  "amdefine": "^1.0.1",
+	  "prop-types": "^15.5.10",
+	  "react": "^15.6.2",
+	  "react-debounce-input": "^3.1.0",
+	  "react-dom": "^15.5.4",
+	  "react-router": "^4.2.0",
+	  "react-router-dom": "^4.2.2",
+	  "sort-by": "^1.2.0"
+	},
+	"devDependencies": {
+	  "react-scripts": "0.9.5"
+	},
+	"scripts": {
+	  "start": "react-scripts start",
+	  "build": "react-scripts build",
+	  "test": "react-scripts test --env=jsdom",
+	  "eject": "react-scripts eject"
+	}
+      }

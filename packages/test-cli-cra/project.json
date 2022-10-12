@@ -1,0 +1,19 @@
+{
+  "name": "test-cli-cra",
+  "nx":{
+    "ignore":true
+  },
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/test-cli-cra/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/test-cli-cra/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

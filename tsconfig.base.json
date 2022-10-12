@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@pref-tools/lh": ["packages/cli/src/index.ts"]
+      "@pref-tools/lh": ["packages/cli/src/index.ts"],
+      "@pref-tools/test-cli-cra": ["packages/test-cli-cra/src/index.js"]
     }
   },
   "exclude": ["node_modules", "tmp"]
