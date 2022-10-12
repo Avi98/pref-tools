@@ -29,6 +29,19 @@
         "main": "packages/cli/src/index.ts",
         "assets": ["packages/cli/*.md"]
       }
+    },
+    "link":{
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "cd ./dist/packages/cli"
+          },
+          {
+            "command": "npm link -f"
+          }
+        ]
+      }
     }
   },
   "tags": []
