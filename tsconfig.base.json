@@ -19,5 +19,5 @@
       "@pref-tools/test-cli-cra": ["packages/test-cli-cra/src/index.js"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "dist"]
 }

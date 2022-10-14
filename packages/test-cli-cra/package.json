@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"@pref-tools/lh": "file:../../dist/packages/cli",
 		"amdefine": "^1.0.1",
 		"prop-types": "^15.5.10",
 		"react": "^15.6.2",
@@ -18,9 +17,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"@pref-tools/lh": "npx ../../dist/packages/cli",
-		"@pref-tools/lh:link": "npm link @pref-tools/lh",
-		"pref-monitor:collect": "npm run @pref-tools/lh",
-		"pref-monitor:path": "npm run @pref-tools/lh --p ./pref-monitorrc.json"
+		"@pref-tools/lh": "npx ../../dist/packages/cli/src/cli.js",
+		"collect": "npm run @pref-tools/lh -- collect -- --help",
+		"path": "npm run @pref-tools/lh --p ./.pref-monitorrc.json"
 	}
 }
