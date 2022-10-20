@@ -1,6 +1,7 @@
 {
   "name": "@pref-tools/lh",
   "version": "0.0.1", 
+  "type": "commonjs",
   "main": "src/index.js",
   "bin": {
     "@pref-tools/lh": "src/cli.js"

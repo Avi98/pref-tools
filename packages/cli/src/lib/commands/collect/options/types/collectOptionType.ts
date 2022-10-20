@@ -1,11 +1,18 @@
+import { Page } from 'puppeteer';
+
 export type CollectOptionsType = {
   /** url to run lighthouse on */
-  url?: string;
+  url?: string[];
 
   /** relative path to the directory where the pref-monitorrc.json
    *  defaults to ./.pref-monitorrc.json
    */
   rcPath?: string;
+
+  /**
+   * startServerCommand. Server command to start the server
+   */
+  startServerCommand?: string;
 
   /**if true will not save chrome will run not run in headless mode
    * @TODO: --debug will launch the open up the browser with the results
@@ -41,11 +48,14 @@ export type CollectOptionsType = {
   /**puppeteerPath */
   puppeteerPath?: string;
 
-  /**puppeteer script relative path
+  /**puppeteerScriptPath*/
+  puppeteerScript?: string;
+
+  /**puppeteer user-flow script relative path
    *
-   * defaults to ./puppeteerScripts
+   * defaults to ./uf-script
    */
-  puppeteerDir: string;
+  ufScriptDir: string;
 
   /**puppeteer options */
   puppeteerOptions?: Record<any, any>;
@@ -64,15 +74,20 @@ export type CollectOptionsType = {
 };
 
 export type TemplateType = {
-  LOGIN: {
-    usernameSelector: string;
-    passwordSelector: string;
-    submitButton: string;
+  login: {
+    selectors: { usernameSelector: string; passwordSelector: string };
+    credentials: { password: string; userName: string };
   };
-  CLS: {
+  cls: {
     /**@TODO  */
   };
-  WARM_CACHE: {
+  warm_cache: {
     /**@TODO  */
   };
 };
+
+export type templateKeys = keyof TemplateType;
+export type loadTemplate = Record<
+  templateKeys,
+  (page: Page, options: any) => void
+>;

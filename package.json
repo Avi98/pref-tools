@@ -47,7 +47,11 @@
   ],
   "dependencies": {
     "@types/yargs": "^17.0.13",
+    "chalk": "^4.1.2",
     "core-js": "^3.6.5",
+    "lighthouse": "^9.6.7",
+    "puppeteer": "^19.0.0",
+    "puppeteer-core": "^19.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "regenerator-runtime": "0.13.7",

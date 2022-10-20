@@ -2,6 +2,15 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
+  "compilerOptions": {
+    "module": "CommonJS",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
   "references": [
     {
       "path": "./tsconfig.lib.json"

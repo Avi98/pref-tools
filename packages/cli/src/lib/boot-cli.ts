@@ -1,10 +1,10 @@
 import { existsSync, readFileSync } from 'fs';
 import { collectLHReport } from './commands/collect';
-import { RcType } from './types/rcJson';
 import { getRcFile } from './utils';
+import { logging } from './utils/logging';
 import { setupYargs } from './utils/yargs';
 
-const getConfig = (path: string): RcType => {
+const getConfig = (path: string) => {
   if (existsSync(path)) {
     return JSON.parse(readFileSync(path, 'utf8'));
   }
@@ -18,6 +18,7 @@ const config = getConfig(getRcFile());
 
 /**run cli from here */
 (async () => {
+  logging(`CLI args will override the config file's configuration`);
   setupYargs({
     commands: [collectLHReport],
     options: basicOptions,
