@@ -1,0 +1,23 @@
+{
+	"collect":{
+		"url":[
+			"/login",
+			"/"
+		],
+		"outDir": "./lh",
+		"isSPA": true,
+		"template": {
+			"LOGIN": {
+				"usernameSelector":"",
+				"passwordSelector": "",
+				"submitButton": ""
+			      }
+		},
+		"buildPath":"./build",
+		"puppeteerPath":"",
+		"puppeteerDir":"",
+		"defaultMedianRun":4
+	},
+	"upload":{},
+	"assert":{}
+}

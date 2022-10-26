@@ -2,7 +2,6 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import { Browser, Page } from 'puppeteer';
 import { RcType } from '../../../types/rcJson';
-import { logging } from '../../../utils/logging';
 import {
   loadTemplate,
   templateKeys,
