@@ -14,6 +14,19 @@ export type CollectOptionsType = {
    */
   startServerCommand?: string;
 
+  /** if start server command is provided need
+   *  to check if the server is ready before running
+   *   Lighthouse
+   *
+   * */
+  startServerReadyPattern?: string;
+
+  /** Start built in server. DO NOT provide startServerCommand
+   *  with this value or Collect cmd will throw error.
+   *
+   */
+  startBuiltInServer?: boolean;
+
   /**if true will not save chrome will run not run in headless mode
    * @TODO: --debug will launch the open up the browser with the results
    *
@@ -43,10 +56,7 @@ export type CollectOptionsType = {
    *
    * defaults to ./build
    */
-  buildPath: string;
-
-  /**puppeteerPath */
-  puppeteerPath?: string;
+  buildPath?: string;
 
   /**puppeteerScriptPath*/
   puppeteerScript?: string;

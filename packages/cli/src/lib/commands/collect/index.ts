@@ -1,7 +1,9 @@
 import { logging } from '../../utils/logging';
 import { yargsCommandType } from '../../utils/yargs/types';
 import PuppeteerManager from '../core/puppeteer/puppeteerManager';
+import { Server } from '../core/StartServer/runner';
 import { collectOptions } from './options';
+import { CollectOptionsType } from './options/types/collectOptionType';
 import { getCollectArgs, readFile } from './utils';
 
 export const collectLHReport: yargsCommandType = {
@@ -11,7 +13,7 @@ export const collectLHReport: yargsCommandType = {
   module: {
     handler: async (argv: any) => {
       logging(`collect method ran with following args:`, 'success');
-      let configFromFile;
+      let configFromFile: CollectOptionsType;
       try {
         configFromFile = readFile(argv.rcPath);
       } catch (e: any) {
@@ -21,13 +23,32 @@ export const collectLHReport: yargsCommandType = {
 
       const collectArgs = getCollectArgs(argv);
       const config = { ...configFromFile, ...collectArgs.collect };
-      const puppeteerManger = new PuppeteerManager(config);
+      const pm = new PuppeteerManager(config);
 
-      /**
-       * start a server and serve build dir on it.
-       * launch puppeteer and all scripts(look for template)
-       * run lighthouse cli
-       */
+      const { url: urls = [], puppeteerScript, template } = configFromFile;
+      await pm.launchBrowser();
+      const serve = new Server(config).start();
+
+      try {
+        for (const url of urls) {
+          if (template) {
+            pm.runPuppeteerScript(url);
+          } else if (puppeteerScript) {
+            pm.runPuppeteerScript(url);
+          }
+          //run lighthouse
+        }
+
+        //load the flow
+        const uf = pm.loadUserFlow();
+        pm.collectUFReport(uf);
+      } catch (error) {
+        throw new Error('');
+      } finally {
+        console.log('');
+        (await serve).close();
+        await pm.closeBrowser();
+      }
     },
   },
 };
