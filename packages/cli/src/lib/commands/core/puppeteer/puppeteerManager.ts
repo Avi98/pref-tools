@@ -75,7 +75,7 @@ class PuppeteerManager {
    * File name and default export function name should be same. (i.e lowercase)
    *
    */
-  loadTemplate(option: Partial<TemplateType>): loadTemplate {
+  private loadTemplate(option: Partial<TemplateType>): loadTemplate {
     return Object.keys(option).reduce((temp, name) => {
       const path = join(__dirname, `./puppeteerTemplate/${name}.js`);
       if (existsSync(path)) {
@@ -129,6 +129,11 @@ class PuppeteerManager {
     } catch (error) {
       throw new Error('user flow file load failed');
     }
+  }
+
+  collectUFReport(flows?: any[]) {
+    if (!flows) return;
+    /** collect the flows and write to the directory */
   }
 }
 

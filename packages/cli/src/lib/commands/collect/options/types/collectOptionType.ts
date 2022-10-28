@@ -58,9 +58,6 @@ export type CollectOptionsType = {
    */
   buildPath?: string;
 
-  /**puppeteerPath */
-  puppeteerPath?: string;
-
   /**puppeteerScriptPath*/
   puppeteerScript?: string;
 

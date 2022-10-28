@@ -4,14 +4,7 @@ import { spawn } from 'child_process';
 import { CollectOptionsType } from '../../collect/options/types/collectOptionType';
 import { FallbackServer } from './FallbackServer';
 
-interface IServer {
-  start: () => Promise<{
-    urls: string[];
-    close: () => Promise<void>;
-  }>;
-}
-
-class Server implements IServer {
+class Server {
   private startCommand: string;
   private startBuiltInServer: boolean;
   private buildPath: string;

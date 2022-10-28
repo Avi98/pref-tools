@@ -21,6 +21,8 @@ async function login(page: Page, context: Context) {
   await page.type(passwordSelector, password);
   await page.click("button[type='submit']");
   await page.waitForNavigation();
+
+  await page.goto(context.url, { waitUntil: 'networkidle0' });
 }
 
 export default login;
