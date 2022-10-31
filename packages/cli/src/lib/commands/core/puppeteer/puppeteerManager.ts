@@ -1,17 +1,28 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
-import { Browser, Page } from 'puppeteer';
+import { Browser, Page, executablePath } from 'puppeteer';
 import { RcType } from '../../../types/rcJson';
+import { logging } from '../../../utils/logging';
 import {
+  chromeOptions,
+  CollectOptionsType,
   loadTemplate,
   templateKeys,
   TemplateType,
 } from '../../collect/options/types/collectOptionType';
+import { getUrlFromBase } from '../../collect/utils';
 import { loadFileDir, resolveFile } from '../utils';
+
+const isHeadless = (option: CollectOptionsType) => {
+  if (option.debug || option.chromeOptions?.headless) {
+    return false;
+  }
+  return true;
+};
 
 class PuppeteerManager {
   private browser: Browser | null;
-  private chromeOptions: object;
+  private chromeOptions: chromeOptions;
   private currentOpenPage: Page | null;
   private puppeteerScript: string | undefined;
   private templateOption: Partial<TemplateType>;
@@ -21,7 +32,10 @@ class PuppeteerManager {
     this.browser = null;
     this.currentOpenPage = null;
     this.userFlowDir = options?.ufScriptDir || '';
-    this.chromeOptions = options.chromeOptions || {};
+    this.chromeOptions =
+      Object.assign({}, options.chromeOptions, {
+        headless: isHeadless(options),
+      }) || {};
     this.templateOption = options.template || {};
     if (options.puppeteerScript) this.puppeteerScript = options.puppeteerScript;
   }
@@ -39,7 +53,6 @@ class PuppeteerManager {
       console.log('');
     }
 
-    // Try relative to the CWD too in case we're installed globally
     try {
       return require(join(process.cwd(), 'node_modules/puppeteer'));
     } catch (_) {
@@ -53,20 +66,40 @@ class PuppeteerManager {
     }
   }
 
+  static getDefaultChromePath(options: CollectOptionsType) {
+    // if (!options.puppeteerScript) return;
+    if (options.chromePath && existsSync(options.chromePath))
+      return options.chromePath;
+
+    const puppeteer: { executablePath: typeof executablePath } =
+      PuppeteerManager._requirePuppeteer();
+    const chromePath = puppeteer?.executablePath();
+    return existsSync(chromePath) ? chromePath : undefined;
+  }
+
   async launchBrowser(): Promise<Browser> {
-    const puppeteer = PuppeteerManager._requirePuppeteer();
-    if (!puppeteer) {
-      throw new Error('Please install puppeteer as dependency');
+    try {
+      const puppeteer = PuppeteerManager._requirePuppeteer();
+      if (!puppeteer) {
+        throw new Error('Please install puppeteer as dependency');
+      }
+
+      const browser = await puppeteer.launch({
+        pipe: false,
+        devTools: false,
+        defaultViewport: null,
+        executablePath: this.chromeOptions['chromePath'],
+        ...this.chromeOptions,
+      });
+
+      await browser.userAgent();
+      this.browser = browser;
+
+      return browser;
+    } catch (error) {
+      logging('error while running puppeteer');
+      throw error;
     }
-
-    const browser = await puppeteer.launch({
-      ...this.chromeOptions,
-      pipe: false,
-      devTools: false,
-    });
-
-    this.browser = browser;
-    return browser;
   }
 
   /**
@@ -79,28 +112,39 @@ class PuppeteerManager {
     return Object.keys(option).reduce((temp, name) => {
       const path = join(__dirname, `./puppeteerTemplate/${name}.js`);
       if (existsSync(path)) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const template = require(join(
+          __dirname,
+          `./puppeteerTemplate/${name}.js`
+        ));
         return {
           ...temp,
-          [name]: require(join(__dirname, `./puppeteerTemplate/${name}.js`)),
+          [name]: template.default,
         };
       }
       return temp;
     }, {} as loadTemplate);
   }
 
-  async runTemplate(url: string) {
-    if (!Object.keys(this.templateOption).length) return null;
+  async runTemplate(baseUrl: string) {
+    if (!Object.keys(this.templateOption).length) return;
+    if (!this.browser) return;
 
     const template = this.loadTemplate(this.templateOption);
-    const browser = await this.launchBrowser();
-    const page = await browser.newPage();
+    const option = this.templateOption;
+    const page = this.currentOpenPage || (await this.browser.newPage());
     this.currentOpenPage = page;
 
-    (Object.keys(template) as templateKeys[]).forEach((tempName) => {
-      if (template[tempName] && this.templateOption[tempName]) {
-        template[tempName](page, { ...this.templateOption[tempName], url });
+    for (const tempName of Object.keys(template) as templateKeys[]) {
+      const redirectURL = option[tempName]?.url;
+      const templateName = template[tempName];
+      if (template[tempName] && option[tempName]) {
+        await templateName(page, {
+          ...option[tempName],
+          url: getUrlFromBase(baseUrl, redirectURL || '').href,
+        });
       }
-    });
+    }
   }
 
   async runPuppeteerScript(url: string) {

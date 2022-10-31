@@ -12,7 +12,6 @@ const collectCommand = ['collect'];
 
 describe('collect command', () => {
   it('run collect command', async () => {
-    console.log({ CLI_PATH });
     const res = await cliRunner(
       CLI_PATH,
       [...collectCommand, '-p', PREF_MONITOR_RC],

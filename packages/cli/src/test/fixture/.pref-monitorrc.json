@@ -16,6 +16,8 @@
 		"buildPath":"./build",
 		"puppeteerPath":"",
 		"puppeteerDir":"",
+		"debug":true,
+		"dryRun":true,
 		"defaultMedianRun":4
 	},
 	"upload":{},

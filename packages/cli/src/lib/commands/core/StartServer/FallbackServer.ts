@@ -1,8 +1,8 @@
-import { join } from 'path';
-import compression from 'compression';
-import express, { Express } from 'express';
+import { join, resolve } from 'path';
+import * as express from 'express';
 import { readdirSync, statSync } from 'fs';
 import { createServer, Server } from 'http';
+import { AddressInfo } from 'net';
 
 const IGNORED_FOLDERS_FOR_AUTOFIND = new Set([
   'node_modules',
@@ -12,9 +12,12 @@ const IGNORED_FOLDERS_FOR_AUTOFIND = new Set([
   'tmp',
 ]);
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const compression = require('compression');
+
 export class FallbackServer {
   private buildDirPath: string;
-  private app: Express;
+  private app: express.Express;
   private portNumber: number;
   private server: undefined | Server;
 
@@ -28,13 +31,12 @@ export class FallbackServer {
     this.app.use('/app', express.static(buildDirPath));
 
     if (isSPA) {
-      this.app.use('/*', (req, res) =>
-        res.sendFile(buildDirPath + '/index.html')
-      );
+      const path = resolve(process.cwd(), buildDirPath + '/index.html');
+      this.app.use('/*', (_, res) => res.sendFile(path));
     }
   }
 
-  listen() {
+  listen(): Promise<AddressInfo> {
     const server = createServer(this.app);
     this.server = server;
 
@@ -46,7 +48,7 @@ export class FallbackServer {
         }
 
         this.portNumber = serverAddress.port;
-        res('started server');
+        res(serverAddress);
       });
     });
   }
@@ -106,7 +108,7 @@ export class FallbackServer {
           )
         );
       } catch (err) {
-        console.log(err);
+        throw new Error('Error while finding the html file');
       }
     }
 

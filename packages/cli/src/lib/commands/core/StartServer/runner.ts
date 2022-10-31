@@ -3,6 +3,7 @@ import kill from 'tree-kill';
 import { spawn } from 'child_process';
 import { CollectOptionsType } from '../../collect/options/types/collectOptionType';
 import { FallbackServer } from './FallbackServer';
+import { logging } from '../../../utils/logging';
 
 class Server {
   private startCommand: string;
@@ -36,13 +37,18 @@ class Server {
   }
 
   async start() {
-    if (this.startCommand) {
-      const waitPattern = this.waitTill;
-      const cmd = this.startCommand;
-      return await this.runCommandAndWait(waitPattern, cmd);
-    }
+    try {
+      if (this.startCommand) {
+        const waitPattern = this.waitTill;
+        const cmd = this.startCommand;
+        return await this.runCommandAndWait(waitPattern, cmd);
+      }
 
-    return await this.startServer(this.buildPath, this.isSpa);
+      return await this.startServer(this.buildPath, this.isSpa);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   private async runCommandAndWait(
@@ -120,7 +126,11 @@ class Server {
      */
 
     const server = new FallbackServer(buildPath, isSPA);
-    await server.listen();
+    await server
+      .listen()
+      .then((res) =>
+        logging(`local server started at port:${res.port}`, 'success')
+      );
 
     const urls = server.getAvailableUrls();
     const urlsToRun = urls.map((url) => {
