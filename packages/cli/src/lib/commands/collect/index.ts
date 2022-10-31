@@ -4,7 +4,7 @@ import PuppeteerManager from '../core/puppeteer/puppeteerManager';
 import { Server } from '../core/StartServer/runner';
 import { collectOptions } from './options';
 import { CollectOptionsType } from './options/types/collectOptionType';
-import { getCollectArgs, readFile } from './utils';
+import { getBaseUrl, getCollectArgs, readFile } from './utils';
 
 export const collectLHReport: yargsCommandType = {
   command: 'collect',
@@ -13,28 +13,35 @@ export const collectLHReport: yargsCommandType = {
   module: {
     handler: async (argv: any) => {
       logging(`collect method ran with following args:`, 'success');
-      let configFromFile: CollectOptionsType;
+      let configFromFile: { collect: CollectOptionsType };
       try {
         configFromFile = readFile(argv.rcPath);
       } catch (e: any) {
-        logging(e.message, 'error');
-        return;
+        console.error(e);
+        throw e;
       }
+      logging(`found file and read config file`, 'success');
 
       const collectArgs = getCollectArgs(argv);
-      const config = { ...configFromFile, ...collectArgs.collect };
-      const pm = new PuppeteerManager(config);
+      const config = { ...configFromFile.collect, ...collectArgs.collect };
+      Object.assign(config, {
+        chromeOptions: {
+          ...config.chromeOptions,
+          chromePath: PuppeteerManager.getDefaultChromePath(config),
+        },
+      });
 
-      const { url: urls = [], puppeteerScript, template } = configFromFile;
+      const pm = new PuppeteerManager(config);
       await pm.launchBrowser();
-      const serve = new Server(config).start();
+      const serve = await new Server(config).start();
 
       try {
+        const { url: urls = [], puppeteerScript = '', template = {} } = config;
+        if (template && serve.url) await pm.runTemplate(getBaseUrl(serve.url));
+
         for (const url of urls) {
-          if (template) {
-            pm.runPuppeteerScript(url);
-          } else if (puppeteerScript) {
-            pm.runPuppeteerScript(url);
+          if (puppeteerScript) {
+            await pm.runPuppeteerScript(url);
           }
           //run lighthouse
         }
@@ -45,8 +52,7 @@ export const collectLHReport: yargsCommandType = {
       } catch (error) {
         throw new Error('');
       } finally {
-        console.log('');
-        (await serve).close();
+        await serve.close();
         await pm.closeBrowser();
       }
     },

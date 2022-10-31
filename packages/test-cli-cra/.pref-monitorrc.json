@@ -1,0 +1,33 @@
+{
+	"collect":{
+		"url":[
+			"/login",
+			"/"
+		],
+		"outDir": "./lh",
+		"isSPA": true,
+		"debug":true,
+		"template": {
+			"LOGIN": {
+				"selectors":
+					{
+					"usernameSelector":"#email",
+					"passwordSelector": "#password"
+					},
+
+				"credentials":{
+					"username":"vivek.shakya@renegadeinsurance.com",
+					"password":"Hello@Sage2022"
+				},
+				"url":"/user/login"
+
+			      }
+		},
+		"buildPath":"./build",
+		"debug":true,
+		"dryRun":true,
+		"defaultMedianRun":4
+	},
+	"upload":{},
+	"assert":{}
+}

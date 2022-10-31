@@ -1,4 +1,8 @@
-import { Page } from 'puppeteer';
+import { Page, PuppeteerNodeLaunchOptions } from 'puppeteer';
+
+export type chromeOptions = PuppeteerNodeLaunchOptions & {
+  chromePath: string;
+};
 
 export type CollectOptionsType = {
   /** url to run lighthouse on */
@@ -74,7 +78,7 @@ export type CollectOptionsType = {
   chromePath?: string;
 
   /**chrome path relativePath*/
-  chromeOptions?: Record<any, any>;
+  chromeOptions?: chromeOptions;
 
   /**default median run Default=3 */
   defaultMedianRun?: number;
@@ -86,12 +90,15 @@ export type CollectOptionsType = {
 export type TemplateType = {
   login: {
     selectors: { usernameSelector: string; passwordSelector: string };
-    credentials: { password: string; userName: string };
+    credentials: { password: string; username: string };
+    url: string;
   };
   cls: {
+    url: string;
     /**@TODO  */
   };
   warm_cache: {
+    url: string;
     /**@TODO  */
   };
 };
@@ -99,5 +106,5 @@ export type TemplateType = {
 export type templateKeys = keyof TemplateType;
 export type loadTemplate = Record<
   templateKeys,
-  (page: Page, options: any) => void
+  (page: Page, options: any) => Promise<void>
 >;

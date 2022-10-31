@@ -18,7 +18,7 @@
 		"test": "react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
 		"@pref-tools/lh": "npx ../../dist/packages/cli/src/cli.js",
-		"collect": "npm run @pref-tools/lh -- collect -- --help",
-		"path": "npm run @pref-tools/lh --p ./.pref-monitorrc.json"
+		"collect": "npm run @pref-tools/lh -- collect",
+		"path": "npm run collect ./.pref-monitorrc.json"
 	}
 }
