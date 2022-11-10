@@ -50,7 +50,7 @@ export const collectLHReport: yargsCommandType = {
         const uf = pm.loadUserFlow();
         pm.collectUFReport(uf);
       } catch (error) {
-        throw new Error('');
+        console.log(error);
       } finally {
         await serve.close();
         await pm.closeBrowser();
