@@ -22,16 +22,17 @@ export class FallbackServer {
   private server: undefined | Server;
 
   constructor(buildDirPath: string, isSPA: boolean) {
-    this.buildDirPath = buildDirPath;
+    this.buildDirPath = join(process.cwd(), buildDirPath);
+    console.log({ buildDirPath: this.buildDirPath });
     this.portNumber = 0;
 
     this.app = express();
     this.app.use(compression());
-    this.app.use('/', express.static(buildDirPath));
-    this.app.use('/app', express.static(buildDirPath));
+    this.app.use('/', express.static(this.buildDirPath));
+    this.app.use('/app', express.static(this.buildDirPath));
 
     if (isSPA) {
-      const path = resolve(process.cwd(), buildDirPath + '/index.html');
+      const path = resolve(process.cwd(), this.buildDirPath + '/index.html');
       this.app.use('/*', (_, res) => res.sendFile(path));
     }
   }

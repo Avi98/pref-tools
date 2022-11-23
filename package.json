@@ -2,7 +2,9 @@
   "name": "pref-tools",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:cli":"nx run cli:test  --watch"
+  },
   "private": true,
   "devDependencies": {
     "@nrwl/cli": "14.8.4",
@@ -24,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "babel-jest": "28.1.1",
+    "cli-prompts-test": "^0.3.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-import": "2.26.0",

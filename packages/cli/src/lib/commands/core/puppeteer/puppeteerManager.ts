@@ -150,7 +150,7 @@ class PuppeteerManager {
   async runPuppeteerScript(url: string) {
     if (!this.puppeteerScript?.length) return;
 
-    const browser = this.browser ? this.browser : await this.launchBrowser();
+    const browser = this.browser || (await this.launchBrowser());
     const pageInstance = this.currentOpenPage;
 
     const puppeteerScript = resolveFile(this.puppeteerScript);
