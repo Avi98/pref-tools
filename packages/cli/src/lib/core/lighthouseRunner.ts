@@ -51,21 +51,26 @@ class BatchRun {
 
         const lh_script = lh();
         const lh_options = this.options.lhOptions;
-        const flags = lh_options.includes('--chrome-flags=')
-          ? ''
-          : [`--chrome-flags`, '--no-sandbox', '--headless', '--disable-gpu'];
+        const flags = lh_options.includes('--chrome-flags')
+          ? []
+          : [`--chrome-flags`, `" --headless --disable-gpu --no-sandbox"`];
 
-        const cmd = ['--output', 'json', '--output-path', 'stdout', ...flags];
+        const cmd = ['--output', 'json', '--output-path', 'stdout'];
 
         logging(`Started running lighthouse on "${site.url}"`, 'success');
-        await promisifySpawn(
+        return await promisifySpawn(
           'node',
-          [lh_script, site.url, '--verbose', ...cmd],
+          [lh_script, site.url, ...cmd, ...flags],
           () => null
-        ).catch((e) => {
-          logging(`Failed to generate the report for ${site.url}`, 'error');
-          throw e;
-        });
+        )
+          .then((std) => {
+            logging(`Save result for ${site.url}`);
+            return std;
+          })
+          .catch((e) => {
+            logging(`Failed to generate the report for ${site.url}`, 'error');
+            throw e;
+          });
       }
     }
   }
