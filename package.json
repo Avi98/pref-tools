@@ -2,7 +2,9 @@
   "name": "pref-tools",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:cli":"nx run cli:test  --watch"
+  },
   "private": true,
   "devDependencies": {
     "@nrwl/cli": "14.8.4",

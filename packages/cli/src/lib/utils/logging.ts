@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 const log = (messages: string) => {
   process.stdout.write(`${messages}\n`);
@@ -16,7 +16,7 @@ export const logging = (
 ) => {
   const messageColor: values = messageStatus[status || 'info'];
   const color = chalk[messageColor];
-  color(log(message));
+  color(log('\n' + message + '\n'));
 };
 
 type key = keyof typeof messageStatus;

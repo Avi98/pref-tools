@@ -43,7 +43,15 @@ export const collectLHReport: yargsCommandType = {
           if (puppeteerScript) {
             await pm.runPuppeteerScript(url);
           }
-          //run lighthouse
+          /**
+           * Run lighthouse with median run 3 as default
+           *
+           * const report = new LighthouseRunner();
+           * const medianRun = report.run('medianRun', {})
+           *
+           * save report on disk
+           *
+           */
         }
 
         //load the flow
