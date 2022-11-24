@@ -1,11 +1,5 @@
-export type runType = 'batchRun' | 'medianRun' | 'userFlows';
+export type runType = 'batchRun' | 'numberOfRun' | 'userFlows';
 export type BatchRun = BatchWithFile | BatchWithURLs;
-
-export type medianRun = {
-  type: 'median';
-  median: number;
-  url: string;
-};
 
 export type UserFlowRun = {
   type: 'userFlow';
@@ -24,4 +18,10 @@ type BatchWithFile = BaseBatch & {
 
 type BatchWithURLs = BaseBatch & {
   urls: string | string[];
+};
+
+export type NumberOfRuns = {
+  numberOfRuns: number;
+  type: 'numberOfRun';
+  url: string;
 };
