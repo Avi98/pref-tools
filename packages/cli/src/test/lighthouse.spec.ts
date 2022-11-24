@@ -19,6 +19,6 @@ describe('lighthouse module', () => {
 
     expect(BATCH_URLS.includes(batchResults.requestedUrl)).toBeTruthy();
   }, 50_000);
-  it('should do do median run if median run is provided', () => {});
+  it('should be run 3 time', () => {});
   it('should identify user-flow scripts and generate report based on it', () => {});
 });
