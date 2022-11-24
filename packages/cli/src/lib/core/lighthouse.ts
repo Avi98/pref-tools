@@ -3,15 +3,17 @@ import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
 import { logging } from '../utils/logging';
 import { lh, promisifySpawn } from './utils';
-import { BatchRun } from './types';
+import { BatchRun, NumberOfRuns } from './types';
+
+type LH_OptionType = BatchRun | NumberOfRuns;
 
 export class LH_Run {
-  options: BatchRun;
-  constructor(config: BatchRun) {
+  options: LH_OptionType;
+  constructor(config: LH_OptionType) {
     this.options = config;
   }
 
-  async execute() {
+  async execute(numberOfRuns?: number) {
     const outDir = this.options.outDir;
     if (this.deleteAndCreateNewDir(outDir)) {
       //@TODO change this to forEach as it will have stop on
@@ -19,7 +21,7 @@ export class LH_Run {
         if (!site.url) continue;
 
         const lh_script = lh();
-        const lh_options = this.options.lhOptions;
+        const lh_options = Object.entries(this.options.lhOptions).flat();
         const flags = lh_options.includes('--chrome-flags')
           ? []
           : //@TODO: run this in head-full mode when debug option is provided
@@ -30,11 +32,14 @@ export class LH_Run {
         logging(`Started running lighthouse on "${site.url}"`, 'success');
         return await promisifySpawn(
           'node',
-          [lh_script, site.url, ...cmd, ...flags],
+          [lh_script, site.url, ...cmd, ...flags, ...lh_options],
           () => null
         )
           .then((std) => {
-            logging(`Save result for ${site.url}`);
+            const successMessage = numberOfRuns
+              ? `Lighthouse ran for ${numberOfRuns} on ${site.url}`
+              : `Lighthouse ran in ${site.url}`;
+            logging(successMessage);
             return std;
           })
           .catch((e) => {
@@ -61,7 +66,7 @@ export class LH_Run {
     return name;
   }
 
-  private sitesInfo(option: BatchRun) {
+  private sitesInfo(option: LH_OptionType) {
     let sites: string[] = [];
     //same origins files should be serialized in same files;
     const sameOrigins: Record<string, boolean> = {};

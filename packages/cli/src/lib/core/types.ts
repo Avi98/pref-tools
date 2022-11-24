@@ -8,7 +8,7 @@ export type UserFlowRun = {
 
 type BaseBatch = {
   type: 'Batch';
-  lhOptions: string;
+  lhOptions: object;
   outDir: string;
 };
 
@@ -21,7 +21,9 @@ type BatchWithURLs = BaseBatch & {
 };
 
 export type NumberOfRuns = {
-  numberOfRuns: number;
   type: 'numberOfRun';
-  url: string;
+  numberOfRuns: number;
+  urls: string;
+  outDir: string;
+  lhOptions: object;
 };
