@@ -7,6 +7,9 @@
 		"outDir": "./lh",
 		"isSPA": true,
 		"debug":true,
+		"userFlow":{
+			"userFlowPath": "/packages/test-cli-cra/userFlows"
+		},
 		"template": {
 			"LOGIN": {
 				"selectors":

@@ -1,10 +1,29 @@
 import { join } from 'path';
-import { OUTPUT_FILE, RC_FILE_NAME, ROOT_PATH } from '../../../utils/constants';
+import {
+  OUTPUT_FILE,
+  RC_FILE_NAME,
+  ROOT_PATH,
+  UF_DIR,
+} from '../../../utils/constants';
 
 const defaultRCPath = join(ROOT_PATH, RC_FILE_NAME);
+const defaultUFDir = join(ROOT_PATH, UF_DIR);
 const defaultOutputFile = join(ROOT_PATH, OUTPUT_FILE);
 
 export const collectOptions = {
+  userFlows: {
+    alias: ['uf'],
+    description: 'Get report from user flows and lighthouse',
+    default: false,
+    boolean: true,
+    type: 'boolean',
+  },
+  userFlowPath: {
+    alias: ['uf_path'],
+    description: 'User flow path that has the files with user flows',
+    default: defaultUFDir,
+    type: 'string',
+  },
   url: {
     alias: 'url to run lighthouse on ',
     description: 'url for which pref is required',

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "test:cli":"nx run cli:test  --watch --detectOpenHandles"
+    "test:cli": "nx run cli:test  --watch --detectOpenHandles"
   },
   "private": true,
   "devDependencies": {
@@ -56,7 +56,7 @@
     "compression": "^1.7.4",
     "core-js": "^3.6.5",
     "express": "^4.18.2",
-    "lighthouse": "^9.6.7",
+    "lighthouse": "^9.6.8",
     "puppeteer": "^19.0.0",
     "puppeteer-core": "^19.0.0",
     "react": "18.2.0",

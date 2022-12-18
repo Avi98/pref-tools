@@ -5,6 +5,11 @@ export type chromeOptions = PuppeteerNodeLaunchOptions & {
 };
 
 export type CollectOptionsType = {
+  /**Relative userFlowPath for the userFlow */
+  userFlow?: {
+    userFlowPath: string;
+  };
+
   /** url to run lighthouse on */
   url?: string[];
 
