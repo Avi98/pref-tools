@@ -2,7 +2,9 @@
   "name": "pref-tools",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:cli": "nx run cli:test  --watch --detectOpenHandles"
+  },
   "private": true,
   "devDependencies": {
     "@nrwl/cli": "14.8.4",
@@ -24,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "babel-jest": "28.1.1",
+    "cli-prompts-test": "^0.3.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-import": "2.26.0",
@@ -53,7 +56,7 @@
     "compression": "^1.7.4",
     "core-js": "^3.6.5",
     "express": "^4.18.2",
-    "lighthouse": "^9.6.7",
+    "lighthouse": "^9.6.8",
     "puppeteer": "^19.0.0",
     "puppeteer-core": "^19.0.0",
     "react": "18.2.0",

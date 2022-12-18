@@ -1,11 +1,13 @@
 ## TODO
 
-2. add a dummy CRA ./build dir for testing fallback server.
-3. test startServerCommand.
-4. create Lighthouse runner and save the results in the o/p dir
-5. collect user - flow reports and save the o/p.
+1. collect user - flow reports and save the o/p.
+2. upload the report
 
-**Lighthouse CLI**
+   **Lighthouse CLI**
 
-1. batch runner
-2. collect report on url
+3. complete the tests
+
+### to continue from
+
+1. Create user flow for collect command
+2. make lighthouse user-flow test pass
