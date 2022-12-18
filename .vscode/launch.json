@@ -7,14 +7,17 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "debug test",
+			"name": "debug cli",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}/packages/cli/src/test/fixture/clirunner.ts",
+			"program": "${workspaceFolder}/packages/cli/src/lib/boot-cli.ts",
+			"preLaunchTask": "tsc: build - packages/cli/tsconfig.json",
 			"outFiles": [
-				"${workspaceFolder}/**/*.js"
-			]
+				// "${workspaceFolder}/**/*.js"
+				"${workspaceFolder}/dist/out-tsc/packages/cli/**/*.js"
+			],
+			"args": ["collect_uf"]
 		}
 	]
 }
