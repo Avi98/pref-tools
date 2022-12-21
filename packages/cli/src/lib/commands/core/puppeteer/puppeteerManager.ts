@@ -164,21 +164,6 @@ class PuppeteerManager {
     }
     if (this.browser) await this.browser.close();
   }
-
-  loadUserFlow() {
-    if (!this.userFlowDir) return;
-    try {
-      const flows = loadFileDir(this.userFlowDir);
-      return flows;
-    } catch (error) {
-      throw new Error('user flow file load failed');
-    }
-  }
-
-  collectUFReport(flows?: any[]) {
-    if (!flows) return;
-    /** collect the flows and write to the directory */
-  }
 }
 
 export default PuppeteerManager;

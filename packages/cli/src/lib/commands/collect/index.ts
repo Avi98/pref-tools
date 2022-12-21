@@ -1,3 +1,4 @@
+import { SaveLHR } from '../../utils';
 import { logging } from '../../utils/logging';
 import { yargsCommandType } from '../../utils/yargs/types';
 import PuppeteerManager from '../core/puppeteer/puppeteerManager';
@@ -5,7 +6,7 @@ import { Server } from '../core/StartServer/runner';
 import { collectOptions } from './options';
 import { CollectOptionsType } from './options/types/collectOptionType';
 import { getBaseUrl, getCollectArgs, readFile } from './utils';
-import { collectUserFlowReports } from './utils/user-flows';
+import { collectUserFlowReports, getJsonResults } from './utils/user-flows';
 
 const normalizeCollectConfig = (argv: any) => {
   let configFromFile: { collect: CollectOptionsType };
@@ -50,20 +51,7 @@ export const collectLHReport: yargsCommandType = {
           if (puppeteerScript) {
             await pm.runPuppeteerScript(url);
           }
-          /**
-           * Run lighthouse with median run 3 as default
-           *
-           * const report = new LighthouseRunner();
-           * const medianRun = report.run('medianRun', {})
-           *
-           * save report on disk
-           *
-           */
         }
-
-        //load the flow
-        const uf = pm.loadUserFlow();
-        pm.collectUFReport(uf);
       } catch (error) {
         console.log(error);
       } finally {
@@ -85,9 +73,12 @@ export const collectUFReport: yargsCommandType = {
 
       if (argv?.userFlow) {
         if (argv.userFlow.userFlowPath) {
-          //start the browser
-          // start the chrome server
-          collectUserFlowReports(config);
+          collectUserFlowReports(config)
+            .then(getJsonResults)
+            .then(SaveLHR)
+            .catch((e) => {
+              throw e;
+            });
         } else {
           logging('Please provide withe the user flows dir path', 'error');
         }

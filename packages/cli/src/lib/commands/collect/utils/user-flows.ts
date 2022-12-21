@@ -64,3 +64,10 @@ const requireFiles = (filePath: string) => {
     export: file.default || file,
   };
 };
+
+export const getJsonResults = (flow: UserFlow) => {
+  if (!flow) throw new Error('No user flow was provided');
+
+  const report = flow.getJsonResults();
+  return JSON.stringify(report);
+};
