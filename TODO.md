@@ -9,5 +9,5 @@
 
 ### to continue from
 
-1. Create and save the reports in dir from Batch run
-2. create and upload the reports.
+1. Create user flow for collect command
+2. make lighthouse user-flow test pass

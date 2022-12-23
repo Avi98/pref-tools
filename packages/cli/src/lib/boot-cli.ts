@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'fs';
-import { collectLHReport } from './commands/collect';
+import { collectLHReport, collectUFReport } from './commands/collect';
 import { getRcFile } from './utils';
 import { logging } from './utils/logging';
 import { setupYargs } from './utils/yargs';
@@ -20,7 +20,7 @@ const config = getConfig(getRcFile());
 (async () => {
   logging(`CLI args will override the config file's configuration`);
   setupYargs({
-    commands: [collectLHReport],
+    commands: [collectLHReport, collectUFReport],
     options: basicOptions,
     config: {
       ...config?.collect,

@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import * as express from 'express';
+import express from 'express';
 import { readdirSync, statSync } from 'fs';
 import { createServer, Server } from 'http';
 import { AddressInfo } from 'net';
