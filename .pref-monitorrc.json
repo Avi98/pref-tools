@@ -8,7 +8,8 @@
 		"isSPA": true,
 		"debug":true,
 		"userFlow":{
-			"userFlowPath": "/packages/test-cli-cra/userFlows"
+			"userFlowPath": "/packages/test-cli-cra/userFlows",
+			"url": "https://coffee-cart.netlify.app/"
 		},
 		"template": {
 			"LOGIN": {

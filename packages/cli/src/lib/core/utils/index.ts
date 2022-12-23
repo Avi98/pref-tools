@@ -9,10 +9,6 @@ export function lh() {
   );
 }
 
-export function lhFlow() {
-  return require('lighthouse/lighthouse-core/fraggle-rock/api');
-}
-
 export function promisifySpawn(
   cmd: string,
   options = [''],

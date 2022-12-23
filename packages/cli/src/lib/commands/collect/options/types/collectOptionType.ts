@@ -8,6 +8,7 @@ export type CollectOptionsType = {
   /**Relative userFlowPath for the userFlow */
   userFlow?: {
     userFlowPath: string;
+    url: string;
   };
 
   /** url to run lighthouse on */

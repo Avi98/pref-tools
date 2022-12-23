@@ -1,3 +1,4 @@
+import LH_UserFlow from '../../core/UserFlow';
 import { SaveLHR } from '../../utils';
 import { logging } from '../../utils/logging';
 import { yargsCommandType } from '../../utils/yargs/types';
@@ -6,7 +7,6 @@ import { Server } from '../core/StartServer/runner';
 import { collectOptions } from './options';
 import { CollectOptionsType } from './options/types/collectOptionType';
 import { getBaseUrl, getCollectArgs, readFile } from './utils';
-import { collectUserFlowReports, getJsonResults } from './utils/user-flows';
 
 const normalizeCollectConfig = (argv: any) => {
   let configFromFile: { collect: CollectOptionsType };
@@ -73,12 +73,17 @@ export const collectUFReport: yargsCommandType = {
 
       if (argv?.userFlow) {
         if (argv.userFlow.userFlowPath) {
-          collectUserFlowReports(config)
-            .then(getJsonResults)
-            .then(SaveLHR)
-            .catch((e) => {
-              throw e;
-            });
+          const lhUF = new LH_UserFlow(config);
+          const userFlows = await lhUF.loadUserFlows();
+          for (const uf of userFlows) {
+            await lhUF
+              .collectFlows(uf)
+              .then((flow) => lhUF.generateReport(flow))
+              .then(SaveLHR)
+              .catch((e) => {
+                throw new Error(e);
+              });
+          }
         } else {
           logging('Please provide withe the user flows dir path', 'error');
         }

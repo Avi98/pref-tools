@@ -87,8 +87,13 @@ class PuppeteerManager {
       const browser = await puppeteer.launch({
         pipe: false,
         devTools: false,
-        defaultViewport: null,
         executablePath: this.chromeOptions['chromePath'],
+        defaultViewport: {
+          isMobile: true,
+          isLandscape: false,
+          width: 800,
+          height: 600,
+        },
         ...this.chromeOptions,
       });
 
