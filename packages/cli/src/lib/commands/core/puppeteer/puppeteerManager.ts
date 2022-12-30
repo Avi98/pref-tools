@@ -87,8 +87,13 @@ class PuppeteerManager {
       const browser = await puppeteer.launch({
         pipe: false,
         devTools: false,
-        defaultViewport: null,
         executablePath: this.chromeOptions['chromePath'],
+        defaultViewport: {
+          isMobile: true,
+          isLandscape: false,
+          width: 800,
+          height: 600,
+        },
         ...this.chromeOptions,
       });
 
@@ -163,21 +168,6 @@ class PuppeteerManager {
       await this.currentOpenPage.close();
     }
     if (this.browser) await this.browser.close();
-  }
-
-  loadUserFlow() {
-    if (!this.userFlowDir) return;
-    try {
-      const flows = loadFileDir(this.userFlowDir);
-      return flows;
-    } catch (error) {
-      throw new Error('user flow file load failed');
-    }
-  }
-
-  collectUFReport(flows?: any[]) {
-    if (!flows) return;
-    /** collect the flows and write to the directory */
   }
 }
 

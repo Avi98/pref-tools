@@ -8,3 +8,7 @@ export const BATCH_URLS = [
   'https://www.wayfair.com/',
   'https://www.usnews.com/',
 ];
+
+const prefConfigFilePath = path.join(process.cwd(), '.pref-monitorrc.json');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const rcConfig = require(prefConfigFilePath);
