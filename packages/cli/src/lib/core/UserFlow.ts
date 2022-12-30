@@ -7,12 +7,18 @@ import { startFlow, userFlow } from './lighthouseUf';
 class LH_UserFlow {
   #config: RcType['collect'];
   #ufDirPath: string;
+  #puppeteer: PuppeteerManager;
 
-  constructor(config: RcType['collect']) {
+  constructor(config: RcType['collect'], puppeteer: PuppeteerManager) {
     this.#config = config;
+    this.#puppeteer = puppeteer;
     if (!config.userFlow?.userFlowPath)
       throw new Error('no user flow path was provided');
     this.#ufDirPath = path.join(process.cwd(), config.userFlow?.userFlowPath);
+  }
+
+  static create(config: RcType['collect'], puppeteer: PuppeteerManager) {
+    return new LH_UserFlow(config, puppeteer);
   }
 
   async loadUserFlows() {
@@ -22,7 +28,7 @@ class LH_UserFlow {
       throw new Error('user flow path do not exist');
     }
 
-    let files = [];
+    let files: string[] = [];
     if (lstatSync(ufDirPath).isDirectory()) {
       files = readdirSync(ufDirPath).map((file) => file);
     } else {
@@ -39,7 +45,7 @@ class LH_UserFlow {
 
   async collectFlows(uf: any) {
     const config = this.#config;
-    const puppeteer = new PuppeteerManager(config);
+    const puppeteer = this.#puppeteer;
 
     const browser = await puppeteer.launchBrowser();
     const page = await browser.newPage();

@@ -7,7 +7,13 @@ export type chromeOptions = PuppeteerNodeLaunchOptions & {
 export type CollectOptionsType = {
   /**Relative userFlowPath for the userFlow */
   userFlow?: {
+    /**puppeteer user-flow script relative path
+     *
+     * defaults to ./UF_DIR
+     */
     userFlowPath: string;
+
+    /** base url on which the user flow reports will be collected */
     url: string;
   };
 
@@ -70,12 +76,6 @@ export type CollectOptionsType = {
 
   /**puppeteerScriptPath*/
   puppeteerScript?: string;
-
-  /**puppeteer user-flow script relative path
-   *
-   * defaults to ./uf-script
-   */
-  ufScriptDir: string;
 
   /**puppeteer options */
   puppeteerOptions?: Record<any, any>;

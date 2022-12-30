@@ -73,7 +73,9 @@ export const collectUFReport: yargsCommandType = {
 
       if (argv?.userFlow) {
         if (argv.userFlow.userFlowPath) {
-          const lhUF = new LH_UserFlow(config);
+          const puppeteer = new PuppeteerManager(config);
+          const lhUF = LH_UserFlow.create(config, puppeteer);
+
           const userFlows = await lhUF.loadUserFlows();
           for (const uf of userFlows) {
             await lhUF

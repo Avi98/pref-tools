@@ -1,8 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
 import { logging } from '../../utils/logging';
+import { CollectOptionsType } from './options/types/collectOptionType';
 
 //TODO: refactor this
-export const getCollectArgs = (argv: any) => {
+export const getCollectArgs = (
+  argv: any
+): Record<'collect', CollectOptionsType> => {
   try {
     const {
       rcPath,
@@ -10,11 +13,12 @@ export const getCollectArgs = (argv: any) => {
       url,
       dryRun,
       outDir,
-      isSpa,
+      isSPA,
       buildPath,
       puppeteerPath,
       chromePath,
       defaultMedianRun,
+      userFlowPath,
     } = argv;
 
     return {
@@ -24,17 +28,21 @@ export const getCollectArgs = (argv: any) => {
         url,
         dryRun,
         outDir,
-        isSpa,
+        isSPA,
         buildPath,
-        puppeteerPath,
+        puppeteerScript: puppeteerPath,
         chromePath,
         defaultMedianRun,
+        userFlow: {
+          url,
+          userFlowPath,
+        },
       },
     };
   } catch (e) {
     logging('args not provided');
+    throw e;
   }
-  return {};
 };
 
 export const readFile = (path: string) => {

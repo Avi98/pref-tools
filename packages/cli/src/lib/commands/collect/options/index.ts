@@ -11,13 +11,6 @@ const defaultUFDir = join(ROOT_PATH, UF_DIR);
 const defaultOutputFile = join(ROOT_PATH, OUTPUT_FILE);
 
 export const collectOptions = {
-  userFlows: {
-    alias: ['uf'],
-    description: 'Get report from user flows and lighthouse',
-    default: false,
-    boolean: true,
-    type: 'boolean',
-  },
   userFlowPath: {
     alias: ['uf_path'],
     description: 'User flow path that has the files with user flows',
