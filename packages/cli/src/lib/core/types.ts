@@ -10,6 +10,7 @@ type BaseBatch = {
   type: 'Batch';
   lhOptions: object;
   outDir: string;
+  urls: string | string[];
 };
 
 type BatchWithFile = BaseBatch & {

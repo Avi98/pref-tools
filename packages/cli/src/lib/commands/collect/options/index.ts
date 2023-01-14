@@ -1,14 +1,4 @@
-import { join } from 'path';
-import {
-  OUTPUT_FILE,
-  RC_FILE_NAME,
-  ROOT_PATH,
-  UF_DIR,
-} from '../../../utils/constants';
-
-const defaultRCPath = join(ROOT_PATH, RC_FILE_NAME);
-const defaultUFDir = join(ROOT_PATH, UF_DIR);
-const defaultOutputFile = join(ROOT_PATH, OUTPUT_FILE);
+import { defaultOutputFile, defaultRCPath, defaultUFDir } from '../../../utils';
 
 export const collectOptions = {
   userFlowPath: {
