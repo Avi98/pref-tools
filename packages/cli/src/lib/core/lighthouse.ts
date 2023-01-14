@@ -2,7 +2,7 @@ import path from 'path';
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
 import { logging } from '../utils/logging';
-import { lh, promisifySpawn } from './utils';
+import { getMedianResults, lh, promisifySpawn } from './utils';
 import { BatchRun, NumberOfRuns } from './types';
 
 type LH_OptionType = BatchRun | NumberOfRuns;
@@ -13,41 +13,44 @@ export class LH_Run {
     this.options = config;
   }
 
-  async execute(numberOfRuns?: number) {
-    const outDir = this.options.outDir;
-    if (this.deleteAndCreateNewDir(outDir)) {
-      //@TODO change this to forEach as it will have stop on
-      for (const site of this.sitesInfo(this.options)) {
-        if (!site.url) continue;
+  async execute(numberOfRuns = 3, url: string) {
+    const results: unknown[] = [];
 
-        const lh_script = lh();
-        const lh_options = Object.entries(this.options.lhOptions).flat();
-        const flags = lh_options.includes('--chrome-flags')
-          ? []
-          : //@TODO: run this in head-full mode when debug option is provided
-            [`--chrome-flags`, `" --headless --disable-gpu --no-sandbox"`];
+    //@TODO change this to forEach as it will have stop on
+    // for (const site of this.sitesInfo(this.options)) {
+    for (let run = 1; run <= numberOfRuns; run++) {
+      if (!url) continue;
 
-        const cmd = ['--output', 'json', '--output-path', 'stdout'];
+      const lh_script = lh();
+      const lh_options = Object.entries(this.options.lhOptions).flat();
+      const flags = lh_options.includes('--chrome-flags')
+        ? []
+        : //@TODO: run this in head-full mode when debug option is provided
+          [`--chrome-flags`, `" --headless --disable-gpu --no-sandbox"`];
 
-        logging(`Started running lighthouse on "${site.url}"`, 'success');
-        return await promisifySpawn(
-          'node',
-          [lh_script, site.url, ...cmd, ...flags, ...lh_options],
-          () => null
-        )
-          .then((std) => {
-            const successMessage = numberOfRuns
-              ? `Lighthouse ran for ${numberOfRuns} on ${site.url}`
-              : `Lighthouse ran in ${site.url}`;
-            logging(successMessage);
-            return std;
-          })
-          .catch((e) => {
-            logging(`Failed to generate the report for ${site.url}`, 'error');
-            throw e;
-          });
-      }
+      const cmd = ['--output', 'json', '--output-path', 'stdout'];
+
+      logging(`Started running lighthouse on "${url}"`, 'success');
+
+      await promisifySpawn(
+        'node',
+        [lh_script, url, ...cmd, ...flags, ...lh_options],
+        () => null
+      )
+        .then((std) => {
+          const successMessage = numberOfRuns
+            ? `Lighthouse run: ${numberOfRuns} on ${url}`
+            : `Lighthouse ran in ${url}`;
+          logging(successMessage);
+          if (typeof std === 'string') results.push(JSON.parse(std));
+        })
+        .catch((e) => {
+          logging(`Failed to generate the report for ${url}`, 'error');
+          throw e;
+        });
     }
+    const medianResults = getMedianResults(results);
+    return medianResults;
   }
 
   private getOrigin(site: string): string {
@@ -95,26 +98,5 @@ export class LH_Run {
       },
       []
     );
-  }
-
-  private deleteAndCreateNewDir(filePath: string) {
-    try {
-      if (existsSync(filePath)) {
-        const files = readdirSync(filePath);
-        files.forEach((f) => {
-          if (f) {
-            const file = path.join(filePath, f);
-            logging(`removing old report file ${f} from ${filePath}`);
-            unlinkSync(file);
-          }
-        });
-        return true;
-      }
-      mkdirSync(filePath);
-      return true;
-    } catch (error) {
-      logging(`Error while creating the report files dir`, 'error');
-      throw error;
-    }
   }
 }

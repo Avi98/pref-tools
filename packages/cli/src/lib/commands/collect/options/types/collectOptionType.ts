@@ -17,6 +17,7 @@ export type CollectOptionsType = {
     url: string;
   };
 
+  ufScriptDir?: string;
   /** url to run lighthouse on */
   url?: string[];
 

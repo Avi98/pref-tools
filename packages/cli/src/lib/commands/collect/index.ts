@@ -1,12 +1,19 @@
+import { LighthouseRunner } from '../../core/lighthouseRunner';
 import LH_UserFlow from '../../core/UserFlow';
-import { SaveLHR } from '../../utils';
+import { cleanLHR, SaveLHR } from '../../utils';
+import { OUTPUT_DIR } from '../../utils/constants';
 import { logging } from '../../utils/logging';
 import { yargsCommandType } from '../../utils/yargs/types';
 import PuppeteerManager from '../core/puppeteer/puppeteerManager';
 import { Server } from '../core/StartServer/runner';
 import { collectOptions } from './options';
 import { CollectOptionsType } from './options/types/collectOptionType';
-import { getBaseUrl, getCollectArgs, readFile } from './utils';
+import {
+  getAppendedOrigins,
+  getBaseUrl,
+  getCollectArgs,
+  readFile,
+} from './utils';
 
 const normalizeCollectConfig = (argv: any) => {
   let configFromFile: { collect: CollectOptionsType };
@@ -34,11 +41,14 @@ export const collectLHReport: yargsCommandType = {
   description: 'collect the report',
   builder: (y) => y.option(collectOptions),
   module: {
-    //@TODO
-    handler: async (argv: any) => {
+    handler: async (argv) => {
       const config = normalizeCollectConfig(argv);
 
+      //cleanup
+      cleanLHR(config.outDir);
+
       logging(`collect method ran with following args:`, 'success');
+
       const pm = new PuppeteerManager(config);
       await pm.launchBrowser();
       const serve = await new Server(config).start();
@@ -46,11 +56,23 @@ export const collectLHReport: yargsCommandType = {
       try {
         const { url: urls = [], puppeteerScript = '', template = {} } = config;
         if (template && serve.url) await pm.runTemplate(getBaseUrl(serve.url));
+        const lh_run = new LighthouseRunner();
 
-        for (const url of urls) {
+        if (!serve.url) throw new Error('serve.url is null');
+        const urlsWithOrigin = getAppendedOrigins(serve.url, urls);
+
+        for (const url of urlsWithOrigin) {
           if (puppeteerScript) {
             await pm.runPuppeteerScript(url);
           }
+          const result = await lh_run.run('numberOfRun', {
+            numberOfRuns: 1,
+            urls: url,
+            outDir: OUTPUT_DIR,
+            lhOptions: config.chromeOptions || {},
+            type: 'numberOfRun',
+          });
+          SaveLHR(JSON.stringify(result));
         }
       } catch (error) {
         console.log(error);

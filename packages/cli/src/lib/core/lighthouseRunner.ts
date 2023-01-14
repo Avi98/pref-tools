@@ -16,30 +16,22 @@ class LighthouseRunner {
       case 'numberOfRun':
         if (config.type === 'numberOfRun') return this.runNumberOfTime(config);
         break;
-
-      // case 'userFlows':
-      //   if ('filePath' in config) return this.userFlowsRun(config);
-      //   break;
-
       default:
         throw new Error('Invalid lighthouse run');
     }
   }
 
   private async runNumberOfTime(config: NumberOfRuns) {
-    let stdout;
-
-    const numberOfRuns = config.numberOfRuns || 3;
     const lh = new LH_Run(config);
-
-    for (let i = 0; i <= numberOfRuns; i++) {
-      stdout = await lh.execute(i);
-    }
-    return stdout;
+    return await lh.execute(config.numberOfRuns, config.urls);
   }
   private async batchRun(config: BatchRunType) {
-    const stdout = await new LH_Run(config).execute();
-    return stdout;
+    const urls = Array.isArray(config.urls) ? config.urls : [config.urls];
+
+    for (const url of urls) {
+      const stdout = await new LH_Run(config).execute(1, url);
+      return stdout;
+    }
     //@TODO write to outdir
   }
   // private medianRun(config: medianRun) {}
