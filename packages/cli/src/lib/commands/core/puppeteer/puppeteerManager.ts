@@ -11,7 +11,7 @@ import {
   TemplateType,
 } from '../../collect/options/types/collectOptionType';
 import { getUrlFromBase } from '../../collect/utils';
-import { loadFileDir, resolveFile } from '../utils';
+import { resolveFile } from '../utils';
 
 const isHeadless = (option: CollectOptionsType) => {
   if (option.debug || option.chromeOptions?.headless) {

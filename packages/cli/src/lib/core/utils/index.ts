@@ -9,6 +9,15 @@ export function lh() {
   );
 }
 
+export function getMedianResults(runs: unknown[]) {
+  const {
+    computeMedianRun,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+  } = require('lighthouse/lighthouse-core/lib/median-run.js');
+
+  return computeMedianRun(runs);
+}
+
 export function promisifySpawn(
   cmd: string,
   options = [''],
@@ -25,7 +34,7 @@ export function promisifySpawn(
     reject = r2;
   });
 
-  logging(`Running cmd ${cmd} ${options}`, 'info');
+  logging(`Running \n cmd ${cmd}\n options: ${options}\n`, 'info');
   const child_process = spawn(cmd, options, {
     cwd: process.cwd(),
   });

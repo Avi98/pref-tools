@@ -2,7 +2,7 @@ import path from 'path';
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readdirSync, unlinkSync } from 'fs';
 import { logging } from '../utils/logging';
-import { lh, promisifySpawn } from './utils';
+import { getMedianResults, lh, promisifySpawn } from './utils';
 import { BatchRun, NumberOfRuns } from './types';
 
 type LH_OptionType = BatchRun | NumberOfRuns;
@@ -16,6 +16,7 @@ export class LH_Run {
   async execute(numberOfRuns?: number) {
     const outDir = this.options.outDir;
     if (this.deleteAndCreateNewDir(outDir)) {
+      const results: unknown[] = [];
       //@TODO change this to forEach as it will have stop on
       for (const site of this.sitesInfo(this.options)) {
         if (!site.url) continue;
@@ -30,23 +31,25 @@ export class LH_Run {
         const cmd = ['--output', 'json', '--output-path', 'stdout'];
 
         logging(`Started running lighthouse on "${site.url}"`, 'success');
-        return await promisifySpawn(
+        await promisifySpawn(
           'node',
           [lh_script, site.url, ...cmd, ...flags, ...lh_options],
           () => null
         )
           .then((std) => {
             const successMessage = numberOfRuns
-              ? `Lighthouse ran for ${numberOfRuns} on ${site.url}`
+              ? `Lighthouse run: ${numberOfRuns} on ${site.url}`
               : `Lighthouse ran in ${site.url}`;
             logging(successMessage);
-            return std;
+            if (typeof std === 'string') results.push(JSON.parse(std));
           })
           .catch((e) => {
             logging(`Failed to generate the report for ${site.url}`, 'error');
             throw e;
           });
       }
+      const medianResults = getMedianResults(results);
+      return medianResults;
     }
   }
 

@@ -16,11 +16,6 @@ class LighthouseRunner {
       case 'numberOfRun':
         if (config.type === 'numberOfRun') return this.runNumberOfTime(config);
         break;
-
-      // case 'userFlows':
-      //   if ('filePath' in config) return this.userFlowsRun(config);
-      //   break;
-
       default:
         throw new Error('Invalid lighthouse run');
     }
@@ -32,7 +27,7 @@ class LighthouseRunner {
     const numberOfRuns = config.numberOfRuns || 3;
     const lh = new LH_Run(config);
 
-    for (let i = 0; i <= numberOfRuns; i++) {
+    for (let i = 1; i <= numberOfRuns; i++) {
       stdout = await lh.execute(i);
     }
     return stdout;

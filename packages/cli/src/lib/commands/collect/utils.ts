@@ -57,6 +57,19 @@ export const getBaseUrl = (url: URL[] | string[] | string) => {
   return new URL(urlArray[0]).origin;
 };
 
+export const appendOriginToUrls = (origin: string, path: string) => {
+  console.log({ origin, path });
+  return new URL(path, origin).href;
+};
+
+export const getAppendedOrigins = (
+  serve: URL[] | string[] | string,
+  urls: string[]
+) => {
+  return serve && Array.isArray(serve) && serve[0] instanceof URL
+    ? urls.map((url) => appendOriginToUrls(getBaseUrl(serve as URL[]), url))
+    : urls;
+};
 export const getUrlFromBase = (baseUrl: string, route: string) => {
   return new URL(route, baseUrl);
 };
