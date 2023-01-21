@@ -49,6 +49,10 @@ export const cleanLHR = (baseDir = LH_DIR) => {
   }
 };
 
+export const readLHRFiles = (baseDir = LH_DIR) => {
+  // @TODO
+};
+
 const createIfNotExists = (baseDir = LH_DIR) => {
   if (!existsSync(baseDir)) mkdirSync(baseDir, { recursive: true });
   return true;

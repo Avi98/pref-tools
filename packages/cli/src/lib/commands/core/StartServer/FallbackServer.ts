@@ -23,7 +23,6 @@ export class FallbackServer {
 
   constructor(buildDirPath: string, isSPA: boolean) {
     this.buildDirPath = join(process.cwd(), buildDirPath);
-    console.log({ buildDirPath: this.buildDirPath });
     this.portNumber = 0;
 
     this.app = express();
