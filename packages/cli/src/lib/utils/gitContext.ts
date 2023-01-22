@@ -12,8 +12,17 @@ const getRawBranch = () => {
         'This can be overridden with setting LHCI_BUILD_CONTEXT__CURRENT_BRANCH env.'
     );
   }
-
   return branch;
+};
+
+export const getHash = () => {
+  const res = spawnSync('git', ['rev-list', '--no-merges', '-n1', 'HEAD'], {
+    encoding: 'utf8',
+  });
+  if (res.status !== 0) {
+    throw new Error('Unable to get the git has');
+  }
+  return res.stdout.trim();
 };
 
 export const getBranch = () => {
@@ -42,7 +51,7 @@ export const getCommitAuthor = (hash = 'HEAD') => {
     }
   );
   if (result.status !== 0) {
-    throw new Error('Unable to determine the authore');
+    throw new Error('Unable to determine the author');
   }
 
   return result.stdout.trim().slice(0, 256);
@@ -87,4 +96,25 @@ export const getAncestorHash = (hash: string, baseBranch: string) => {
   return getBranch() === baseBranch
     ? getAncestorHashForBase(hash)
     : getAncestorHashForBranch(hash, baseBranch);
+};
+
+export const getCurrentHash = () => {
+  const results = spawnSync('git', ['rev-list', '--no-merges', '-n1', 'HEAD'], {
+    encoding: 'utf8',
+  });
+  if (results.status !== 0) return '';
+  return results.stdout.trim();
+};
+
+export const getCommitTime = (hash: string) => {
+  const result = spawnSync('git', ['log', '-n1', '--pretty=%cI', hash], {
+    encoding: 'utf8',
+  });
+  if (result.status !== 0) {
+    throw new Error(
+      'Unable to retrieve committer timestamp from commit. ' +
+        'This can be overridden with setting LHCI_BUILD_CONTEXT__COMMIT_TIME env.'
+    );
+  }
+  return result.stdout.trim();
 };

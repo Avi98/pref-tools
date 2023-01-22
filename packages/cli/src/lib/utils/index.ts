@@ -5,6 +5,7 @@ import {
   readdirSync,
   unlinkSync,
   lstatSync,
+  readFileSync,
 } from 'fs';
 import path, { join } from 'path';
 import { argv } from 'yargs';
@@ -50,7 +51,15 @@ export const cleanLHR = (baseDir = LH_DIR) => {
 };
 
 export const readLHRFiles = (baseDir = LH_DIR) => {
-  // @TODO
+  const lh_json: any[] = [];
+
+  if (lstatSync(baseDir).isDirectory()) {
+    for (const lhFile of readdirSync(baseDir)) {
+      const filePath = path.join(baseDir, lhFile);
+      lh_json.push(readFileSync(filePath, 'utf8'));
+    }
+  }
+  return lh_json;
 };
 
 const createIfNotExists = (baseDir = LH_DIR) => {

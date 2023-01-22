@@ -4,6 +4,9 @@ import {
   getBranch,
   getCommit,
   getCommitAuthor,
+  getCommitTime,
+  getCurrentHash,
+  getHash,
 } from '../../../utils/gitContext';
 import { APIService } from './apiService';
 
@@ -18,20 +21,19 @@ const getTokenApi = (token: string) => {
   return api;
 };
 
-const getGitContext = ({
-  hash,
-  baseBranch,
-}: {
-  hash: string;
-  baseBranch: string;
-}) => {
+const getGitContext = (baseBranch: string) => {
+  const hash = getHash();
+  const ancestorHash = getAncestorHash(hash, baseBranch);
+
   return {
+    avatarUrl: '',
+    ancestorHash: ancestorHash,
     branch: getBranch(),
     commitMessage: getCommit(),
-    avatarUrl: '',
-    hash: getAncestorHash(hash, baseBranch),
-    committedAt: '',
     author: getCommitAuthor(),
+    hash: getCurrentHash(),
+    committedAt: getCommitTime(hash),
+    ancestorCommitTime: getCommitTime(ancestorHash),
   };
 };
 
@@ -46,6 +48,13 @@ export type buildDto = {
   externalBuildUrl: string;
   hash: string;
   runAt: string;
+  projectId: number;
+};
+
+export type LHReportDto = {
+  lhrJson: JSON;
+  url: string;
+  buildId: number;
   projectId: number;
 };
 
@@ -67,29 +76,46 @@ export const readUploadResults = async (token: string, path: string) => {
     id: 1,
     baseBranch: 'feat/test-cli',
   };
-  const gitContext = getGitContext({
-    hash: project.hash,
-    baseBranch: project.baseBranch,
-  });
+  const baseBranch = project.baseBranch || 'master';
+  const gitContext = getGitContext(baseBranch);
 
   const currentDate = new Date().toISOString();
-  await api
+  const build = await api
     .post<buildDto>('/addBuild', {
-      //@todo
-      ancestorCommittedAt: currentDate,
-      ancestorHash: gitContext.hash,
+      ancestorCommittedAt: gitContext.ancestorCommitTime,
+      ancestorHash: gitContext.ancestorHash,
       branch: gitContext.branch,
       author: gitContext.author,
       avatarUrl: gitContext.avatarUrl,
       commitMessage: gitContext.commitMessage,
-      //@todo
-      committedAt: currentDate,
+      committedAt: gitContext.committedAt,
       externalBuildUrl: '',
       hash: gitContext.hash,
       projectId: project.id,
       runAt: currentDate,
     })
-    .catch((e) => {});
+    .catch((e) => {
+      throw new Error('Failed to add build');
+    });
 
-  const results = readLHRFiles(path);
+  if (build) {
+    const lh_json = readLHRFiles(path);
+    console.log({ build });
+    const saveReport = lh_json.map((lh) => {
+      if (lh) {
+        const lh_op = JSON.parse(lh);
+        return api.post<LHReportDto>('/saveReport', {
+          projectId: 1,
+          lhrJson: lh,
+          buildId: build.buildId,
+          url: lh_op.finalUrl,
+        });
+      }
+      return null;
+    });
+    if (saveReport.filter(Boolean).length)
+      await Promise.all(saveReport).then((res) => {
+        console.log({ res });
+      });
+  }
 };
