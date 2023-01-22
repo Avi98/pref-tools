@@ -58,7 +58,6 @@ export const getBaseUrl = (url: URL[] | string[] | string) => {
 };
 
 export const appendOriginToUrls = (origin: string, path: string) => {
-  console.log({ origin, path });
   return new URL(path, origin).href;
 };
 

@@ -1,6 +1,7 @@
 import { LighthouseRunner } from '../../core/lighthouseRunner';
 import LH_UserFlow from '../../core/UserFlow';
-import { SaveLHR } from '../../utils';
+import { cleanLHR, SaveLHR } from '../../utils';
+import { OUTPUT_DIR } from '../../utils/constants';
 import { logging } from '../../utils/logging';
 import { yargsCommandType } from '../../utils/yargs/types';
 import PuppeteerManager from '../core/puppeteer/puppeteerManager';
@@ -43,7 +44,11 @@ export const collectLHReport: yargsCommandType = {
     handler: async (argv) => {
       const config = normalizeCollectConfig(argv);
 
+      //cleanup
+      cleanLHR(config.outDir);
+
       logging(`collect method ran with following args:`, 'success');
+
       const pm = new PuppeteerManager(config);
       await pm.launchBrowser();
       const serve = await new Server(config).start();
@@ -63,7 +68,7 @@ export const collectLHReport: yargsCommandType = {
           const result = await lh_run.run('numberOfRun', {
             numberOfRuns: 1,
             urls: url,
-            outDir: './.lh_report',
+            outDir: OUTPUT_DIR,
             lhOptions: config.chromeOptions || {},
             type: 'numberOfRun',
           });
