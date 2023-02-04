@@ -56,7 +56,7 @@ class PuppeteerManager {
     try {
       return require(join(process.cwd(), 'node_modules/puppeteer'));
     } catch (_) {
-      console.log();
+      console.log('');
     }
 
     try {
