@@ -1,3 +1,4 @@
+import { logging } from '../utils/logging';
 import { LH_Run } from './lighthouse';
 import type {
   BatchRun,
@@ -29,6 +30,8 @@ class LighthouseRunner {
     const urls = Array.isArray(config.urls) ? config.urls : [config.urls];
 
     for (const url of urls) {
+      logging(`running on ${url}`);
+
       const stdout = await new LH_Run(config).execute(1, url);
       return stdout;
     }

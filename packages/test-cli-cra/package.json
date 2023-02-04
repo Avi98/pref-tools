@@ -21,6 +21,7 @@
     "collect": "npm run @pref-tools/lh -- collect_lh",
     "cleanup": "npm run @pref-tools/lh -- clean_up",
     "upload:file": "npm run @pref-tools/lh -- upload_lh -t 121212",
+    "batchRun": "npm run @pref-tools/lh -- batch_lh -u https://www.example.com/ https://web.dev https://web.dev/ ",
     "path": "npm run collect ./.pref-monitorrc.json",
     "upload": "npm run upload:file"
   }
