@@ -59,23 +59,11 @@ export type LHReportDto = {
 };
 
 export const readUploadResults = async (token: string, path: string) => {
-  /**
-   * get project info by token
-   * get git context
-   * create build in DB.
-   * create result in DB link with build
-   */
   const api = getTokenApi(token);
 
-  //@TODO
-  // const project = await api.get(`/project-by-token/${token}`);
-  // if (!project) throw new Error('Project not found');
+  const project = await api.get(`/project-by-token/${token}`);
+  if (!project) throw new Error('Project not found');
 
-  const project = {
-    hash: '',
-    id: 1,
-    baseBranch: 'feat/test-cli',
-  };
   const baseBranch = project.baseBranch || 'master';
   const gitContext = getGitContext(baseBranch);
 
@@ -100,7 +88,6 @@ export const readUploadResults = async (token: string, path: string) => {
 
   if (build) {
     const lh_json = readLHRFiles(path);
-    console.log({ build });
     const saveReport = lh_json.map((lh) => {
       if (lh) {
         const lh_op = JSON.parse(lh);
@@ -113,9 +100,6 @@ export const readUploadResults = async (token: string, path: string) => {
       }
       return null;
     });
-    if (saveReport.filter(Boolean).length)
-      await Promise.all(saveReport).then((res) => {
-        console.log({ res });
-      });
+    if (saveReport.filter(Boolean).length) await Promise.all(saveReport);
   }
 };
