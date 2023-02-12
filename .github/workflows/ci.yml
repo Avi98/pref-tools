@@ -1,0 +1,38 @@
+# https://tane.dev/2020/05/publishing-npm-libraries-using-nx-and-github-actions/
+
+name: Publish to NPM
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, reopened, synchronize]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull.request.head.ref }}
+          fetch-depth: 0
+
+      - name: use node.js ${{ matrix.node.version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: fetch base branches
+        run: git fetch --no-tags --prune --depth=5 origin master
+
+      - name: install environments
+        run: npm ci
+
+      - name: run lint
+        run: npm run lint
+
+      #  TODO: code coverage
+      # - name: run test coverage
+      #   run: npm run affected:test -- --base="origin/master" --codeCoverage

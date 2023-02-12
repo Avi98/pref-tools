@@ -1,0 +1,40 @@
+name: Publish to npm
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        if: github.event.pull_request.merged == true && contains(github.event.commits[0].message, '[skip-ci]') == false
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: setup git user
+        shell: bash
+        run: git config user.email "9958703925.dad@gmail.com" && git config user.name "pref-tools - bot"
+
+      - name: use node.js
+        uses: actions/setup-node@v3
+        with:
+          registry-url: https://registry.npmjs.org
+
+      - name: npm install
+        run: npm i
+
+      - name: npm build
+        run: npm rux nx -- affected:build
+
+      - name: test
+        run: npm run nx -- affected:test
+
+      - name: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run nx -- run cli:version
