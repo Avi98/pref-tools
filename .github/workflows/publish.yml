@@ -28,7 +28,7 @@ jobs:
         run: npm i
 
       - name: npm build
-        run: npm rux nx -- affected:build:cli
+        run: npm run nx -- affected:build:cli
 
       # TODO
       # - name: test
