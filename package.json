@@ -40,6 +40,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
+    "ngx-deploy-npm": "^5.0.0",
     "nx": "15.6.3",
     "prettier": "^2.6.2",
     "react-debounce-input": "^3.3.0",
@@ -73,4 +74,3 @@
     "yargs": "^17.6.0"
   }
 }
-
