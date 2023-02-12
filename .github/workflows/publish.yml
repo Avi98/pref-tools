@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: npm build
-        run: npm run build:cli
+        run: npm run nx -- affected:build
 
       # TODO
       # - name: test

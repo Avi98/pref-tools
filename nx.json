@@ -3,7 +3,10 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "pref-tools",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "origin/master"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
   },
   "tasksRunnerOptions": {
     "default": {
