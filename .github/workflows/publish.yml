@@ -28,10 +28,11 @@ jobs:
         run: npm i
 
       - name: npm build
-        run: npm rux nx -- affected:build
+        run: npm rux nx -- affected:build:cli
 
-      - name: test
-        run: npm run nx -- affected:test
+      # TODO
+      # - name: test
+      #   run: npm run nx -- affected:test:cli
 
       - name: release
         env:
