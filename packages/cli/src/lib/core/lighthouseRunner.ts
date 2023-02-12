@@ -1,3 +1,5 @@
+import { SaveLHR } from '../utils';
+import { logging } from '../utils/logging';
 import { LH_Run } from './lighthouse';
 import type {
   BatchRun,
@@ -27,15 +29,19 @@ class LighthouseRunner {
   }
   private async batchRun(config: BatchRunType) {
     const urls = Array.isArray(config.urls) ? config.urls : [config.urls];
-
+    const results = [];
     for (const url of urls) {
+      logging(`running on ${url}`);
+
       const stdout = await new LH_Run(config).execute(1, url);
-      return stdout;
+      if (config['outDir']) {
+        SaveLHR(JSON.stringify(stdout), config['outDir']);
+      } else {
+        results.push(stdout);
+      }
     }
-    //@TODO write to outdir
+    return results;
   }
-  // private medianRun(config: medianRun) {}
-  // private userFlowsRun(config: UserFlowRun) {}
 }
 
 export { LighthouseRunner };

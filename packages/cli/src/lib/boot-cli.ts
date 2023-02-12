@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'fs';
+import { batchRun } from './commands/batchRun';
 import { cleanUp } from './commands/cleanResults';
 import { collectLHReport, collectUFReport } from './commands/collect';
 import { uploadReport } from './commands/upload';
@@ -22,7 +23,13 @@ const config = getConfig(getRcFile());
 (async () => {
   logging(`CLI args will override the config file's configuration`);
   setupYargs({
-    commands: [collectLHReport, collectUFReport, cleanUp, uploadReport],
+    commands: [
+      collectLHReport,
+      collectUFReport,
+      cleanUp,
+      uploadReport,
+      batchRun,
+    ],
     options: basicOptions,
     config: {
       ...config?.collect,
