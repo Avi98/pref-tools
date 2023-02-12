@@ -11,6 +11,18 @@
         "lintFilePatterns": ["packages/cli/**/*.ts"]
       }
     },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ],
+      "options": {
+        "baseBranch": "master"
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/cli"],
@@ -30,7 +42,7 @@
         "assets": ["packages/cli/*.md", "packages/cli/src/cli.js"]
       }
     },
-    "link":{
+    "link": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
