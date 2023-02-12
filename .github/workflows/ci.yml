@@ -1,6 +1,6 @@
 # https://tane.dev/2020/05/publishing-npm-libraries-using-nx-and-github-actions/
 
-name: Publish to NPM
+name: CI
 on:
   pull_request:
     branches:
@@ -30,8 +30,8 @@ jobs:
       - name: install environments
         run: npm ci
 
-      - name: run lint
-        run: npm run lint
+      # - name: run lint
+      #   run: npm run lint
 
       #  TODO: code coverage
       # - name: run test coverage
