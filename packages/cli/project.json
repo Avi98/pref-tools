@@ -20,7 +20,17 @@
         }
       ],
       "options": {
-        "baseBranch": "master"
+        "postTargets": ["cli:npm"],
+        "baseBranch": "master",
+        "commitMessageFormat": "release(${projectName}): ${version}",
+        "noVerify": true,
+        "push": true
+      }
+    },
+    "npm": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public"
       }
     },
     "test": {
@@ -53,6 +63,12 @@
             "command": "npm link -f"
           }
         ]
+      }
+    },
+    "deploy": {
+      "executor": "ngx-deploy-npm:deploy",
+      "options": {
+        "access": "public"
       }
     }
   },
