@@ -12,17 +12,29 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "ZGVlMDM1ZTYtMmUwMi00NjU1LTg0ZmItOWVjMzdmMWY0YjhjfHJlYWQtd3JpdGU="
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "accessToken": "NDY0NTMwYjAtZmUxMC00OTYzLWE0MGEtYjUwZGQyMDY3M2NmfHJlYWQtd3JpdGU="
       }
     }
   },
   "targetDefaults": {
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json"
+      ]
     },
     "test": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/jest.preset.js"
+      ]
     }
   },
   "generators": {
