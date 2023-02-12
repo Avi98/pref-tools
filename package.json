@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "test:cli": "nx run cli:test  --watch --detectOpenHandles",
+    "test:cli": "nx run cli:test --watch --detectOpenHandles",
     "build:cli": "nx run cli:build",
     "lint": "nx run lint"
   },

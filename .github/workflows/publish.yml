@@ -25,10 +25,10 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: npm install
-        run: npm i
+        run: npm ci
 
       - name: npm build
-        run: npm run nx -- affected:build:cli
+        run: npm run build:cli
 
       # TODO
       # - name: test
