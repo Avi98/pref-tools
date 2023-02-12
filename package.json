@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "test:cli": "nx run cli:test  --watch --detectOpenHandles"
+    "test:cli": "nx run cli:test  --watch --detectOpenHandles",
+    "build:cli": "nx run cli:build",
+    "lint": "nx run lint"
   },
   "private": true,
   "devDependencies": {
