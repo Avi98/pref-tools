@@ -1,10 +1,6 @@
-import { ArgumentsCamelCase } from 'yargs';
-import { LighthouseRunner } from '../../core/lighthouseRunner';
-import { BatchRun } from '../../core/types';
-import { cleanLHR, defaultOutputFile } from '../../utils';
-import { logging } from '../../utils/logging';
+import { defaultOutputFile } from '../../utils';
 import { yargsCommandType } from '../../utils/yargs/types';
-import { getUrlsFromFiles } from './utils/getUrls';
+import { handler } from './handler';
 
 const options = {
   outDir: {
@@ -18,6 +14,7 @@ const options = {
     description: 'List of the urls to run on lighthouse',
     type: 'string',
     default: defaultOutputFile,
+    array: true,
   },
   sitesFilePath: {
     alias: ['sites', '-s'],
@@ -31,24 +28,6 @@ export const batchRun: yargsCommandType = {
   description: 'batch run all the files ',
   builder: (y) => y.option(options),
   module: {
-    handler: async (argv: any) => {
-      cleanLHR(argv['outDir']);
-      if (argv.sitesFilePath && argv.urls) {
-        throw new Error('Sites file and urls both can should not be provided');
-      }
-
-      const urlsFromFiles = getUrlsFromFiles(argv.sitesFilePath);
-
-      const config: BatchRun = {
-        lhOptions: {},
-        outDir: argv.outDir,
-        urls: argv.urls || urlsFromFiles,
-        type: 'Batch',
-      };
-
-      const lh = new LighthouseRunner();
-      const res = await lh.run('batchRun', config);
-      console.log(res);
-    },
+    handler,
   },
 };
