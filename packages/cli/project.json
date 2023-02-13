@@ -20,17 +20,11 @@
         }
       ],
       "options": {
-        "postTargets": ["cli:npm"],
+        "postTargets": ["cli:deploy"],
         "baseBranch": "master",
         "commitMessageFormat": "release(${projectName}): ${version}",
         "noVerify": true,
         "push": true
-      }
-    },
-    "npm": {
-      "executor": "ngx-deploy-npm:deploy",
-      "options": {
-        "access": "public"
       }
     },
     "test": {

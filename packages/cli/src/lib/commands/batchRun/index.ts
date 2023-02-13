@@ -28,6 +28,7 @@ export const batchRun: yargsCommandType = {
   description: 'batch run all the files ',
   builder: (y) => y.option(options),
   module: {
+    //@TODO
     handler,
   },
 };
