@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.2.0](https://github.com/Avi98/pref-tools/compare/cli-0.1.0...cli-0.2.0) (2023-02-13)
+
+
+### Features
+
+* added git token for CI-CD ([9bd4c9a](https://github.com/Avi98/pref-tools/commit/9bd4c9ab3b1501252fbd64161d010eb916f1f7bd))
+
+
+
 # 0.1.0 (2023-02-12)
 
 
