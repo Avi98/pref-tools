@@ -8,6 +8,7 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 ### Features
 
 * added git token for CI-CD ([9bd4c9a](https://github.com/Avi98/pref-tools/commit/9bd4c9ab3b1501252fbd64161d010eb916f1f7bd))
+* post target for publishing package added ([2703ecf](https://github.com/Avi98/pref-tools/commit/2703ecf940a5aa4cb39095e23bacdc333fb6ac3a))
 
 
 
