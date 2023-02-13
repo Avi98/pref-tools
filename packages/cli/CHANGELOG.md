@@ -2,6 +2,10 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+## [0.1.1](https://github.com/Avi98/pref-tools/compare/cli-0.1.0...cli-0.1.1) (2023-02-13)
+
+
+
 # 0.1.0 (2023-02-12)
 
 
