@@ -1,6 +1,6 @@
 {
   "name": "@avi92/pref-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "type": "commonjs",
   "main": "src/index.js",
   "bin": {
