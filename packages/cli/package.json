@@ -1,5 +1,5 @@
 {
-  "name": "@pref-tools/lh",
+  "name": "pref-cli",
   "version": "0.2.0",
   "type": "commonjs",
   "main": "src/index.js",
