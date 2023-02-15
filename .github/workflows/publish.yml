@@ -7,8 +7,14 @@ on:
 
 jobs:
   publish:
+    if: github.repository == 'Avi98/pref-tools'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
+      - name: pwd
+        run: pwd
       - name: checkout code
         if: github.event.pull_request.merged == true && contains(github.event.commits[0].message, '[skip-ci]') == false
         uses: actions/checkout@v2
@@ -18,11 +24,12 @@ jobs:
 
       - name: setup git user
         shell: bash
-        run: git config user.email "9958703925.dad@gmail.com" && git config user.name "pref-tools - bot"
+        run: git config user.email "9958703925.dad@gmail.com" && git config user.name "avinash-bot"
 
       - name: use node.js
         uses: actions/setup-node@v3
         with:
+          node-version: ${{ matrix.node-version }}
           registry-url: https://registry.npmjs.org
 
       - name: npm install
