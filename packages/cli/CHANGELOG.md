@@ -2,6 +2,15 @@
 
 This file was generated using [@jscutlery/semver](https://github.com/jscutlery/semver).
 
+# [0.3.0](https://github.com/Avi98/pref-tools/compare/cli-0.2.0...cli-0.3.0) (2023-02-15)
+
+
+### Features
+
+* added matrix strategy ([b2a1c5b](https://github.com/Avi98/pref-tools/commit/b2a1c5b071c02da9bde99f8594122c5ced07bae2))
+
+
+
 # [0.2.0](https://github.com/Avi98/pref-tools/compare/cli-0.1.0...cli-0.2.0) (2023-02-13)
 
 
