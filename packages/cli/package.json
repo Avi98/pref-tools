@@ -1,5 +1,5 @@
 {
-  "name": "pref-cli",
+  "name": "@avi92/pref-cli",
   "version": "0.3.0",
   "type": "commonjs",
   "main": "src/index.js",
